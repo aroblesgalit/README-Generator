@@ -15,6 +15,8 @@ async function init() {
         const userResponse = await promptUser();
         // Get results from user
         const { fullName, username, title, shortDescription, longDescription, screenshotUrl, installation, usage, credits, license, tests, badge } = userResponse;
+        // Create list from comma separated responses
+        const installationList = await createList(installation);
 
         // Call axios
         const avatarUrl = await getAvatar(username);
@@ -109,6 +111,16 @@ function promptUser() {
             name: "badge"
         }
     ])
+}
+
+// Create function to render list layout
+function createList(responseList) {
+    const responseArray = responseList.split(",");
+    let responseTemplate = "";
+    for (let i = 0; i < responseArray.length; i++ ) {
+        responseTemplate += i + 1 + ". " + responseArray[i] + "\n";
+    }
+    return responseTemplate;
 }
 
 // Create function to call axios to get user's avatar

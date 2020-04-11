@@ -1,12 +1,12 @@
 
-# README Generator   [![Contributor Covenant](https://img.shields.io/badge/Contributor%20Covenant-v2.0%20adopted-ff69b4.svg)](code_of_conduct.md) ![User Badge](https://img.shields.io/badge/README-Generator-brightgreen)
-> Command-line application for dynamically generating a README.md    
+# Title   [![Contributor Covenant](https://img.shields.io/badge/Contributor%20Covenant-v2.0%20adopted-ff69b4.svg)](code_of_conduct.md) ![User Badge](yes)
+> yes    
 
 
 ## Description  
-This was a homework assignment where we created a command-line application that dynamically generates a README.md from a user's input. The application will be invoked with the following command - node index.js  
+yes  
 
-![Screenshot](https://github.com/aroblesgalit/09-Good-README-Generator/raw/master/images/readme-generator-screenshot.JPG)  
+![Screenshot](yes)  
 
 
 ## Table of Contents  
@@ -20,15 +20,15 @@ This was a homework assignment where we created a command-line application that 
 
 
 ## Installation  
-    npm install readmeGenerator
+    step 1, step 2, step 3, step 4
 
 
 ## Usage  
-    No examples provided.
+    yes
 
 
 ## Credits  
-    GitHub API, Moment
+    yes
 
 
 ## License  
@@ -41,7 +41,7 @@ Please note that this project is released with a Contributor Code of Conduct. By
 
 
 ## Tests  
-    No tests provided.
+    yes
 
 
 ## Author  
