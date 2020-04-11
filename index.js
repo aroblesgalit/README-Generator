@@ -25,7 +25,7 @@ async function init() {
         const year = await moment().year();
 
         // Create template
-        const template = await generateTemplate(fullName, username, title, shortDescription, longDescription, screenshotUrl, installation, usage, credits, license, tests, badge, avatarUrl, year);
+        const template = await generateTemplate(fullName, username, title, shortDescription, longDescription, screenshotUrl, installationList, usage, credits, license, tests, badge, avatarUrl, year);
         // Write file
         await writeFileAsync("README.md", template, "utf8");
         console.log("README.md has been generated.");
@@ -136,7 +136,7 @@ function getAvatar(username) {
 }
 
 // Create function to generate the template literate using data from the prompt and GitHub call
-function generateTemplate(fullName, username, title, shortDescription, longDescription, screenshotUrl, installation, usage, credits, license, tests, badge, avatarUrl, year) {
+function generateTemplate(fullName, username, title, shortDescription, longDescription, screenshotUrl, installationList, usage, credits, license, tests, badge, avatarUrl, year) {
     return `
 # ${title}   [![Contributor Covenant](https://img.shields.io/badge/Contributor%20Covenant-v2.0%20adopted-ff69b4.svg)](code_of_conduct.md) ![User Badge](${badge})
 > ${shortDescription}    
@@ -159,7 +159,7 @@ ${longDescription}
 
 
 ## Installation  
-    ${installation}
+${installationList}
 
 
 ## Usage  
