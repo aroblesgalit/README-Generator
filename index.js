@@ -20,6 +20,8 @@ async function init() {
         const usageList = await createList(usage, "unordered");
         const creditList = await createList(credits, "unordered");
         const testList = await createList(tests, "unordered");
+        // Create badges from badge urls
+        const badgeTags = await renderBadges(badge);
 
         // Call axios
         const avatarUrl = await getAvatar(username);
@@ -28,7 +30,7 @@ async function init() {
         const year = await moment().year();
 
         // Create template
-        const template = await generateTemplate(fullName, username, title, shortDescription, longDescription, screenshotUrl, installationList, usageList, creditList, license, testList, badge, avatarUrl, year);
+        const template = await generateTemplate(fullName, username, title, shortDescription, longDescription, screenshotUrl, installationList, usageList, creditList, license, testList, badgeTags, avatarUrl, year);
         // Write file
         await writeFileAsync("README.md", template, "utf8");
         console.log("README.md has been generated.");
@@ -73,17 +75,17 @@ function promptUser() {
         },
         {
             type: "input",
-            message: "Provide a step-by-step description of how to install your project (separate using a comma):",
+            message: "Provide a step-by-step description of how to install your project (separate using commas):",
             name: "installation"
         },
         {
             type: "input",
-            message: "Provide instructions and examples for use (separate using a comma):",
+            message: "Provide instructions and examples for use (separate using commas):",
             name: "usage"
         },
         {
             type: "input",
-            message: "List your collaborators, third-party assets, etc. if any (separate using a comma):",
+            message: "List your collaborators, third-party assets, etc. if any (separate using commas):",
             name: "credits"
         },
         {
@@ -105,15 +107,25 @@ function promptUser() {
         },
         {
             type: "input",
-            message: "Write tests for your application (separate using a comma):",
+            message: "Write tests for your application (separate using commas):",
             name: "tests"
         },
         {
             type: "input",
-            message: "Add a url for a badge for this application:",
+            message: "Add urls (separate using commas) for badges:",
             name: "badge"
         }
     ])
+}
+
+// Create function to render badges for layout
+function renderBadges(badge) {
+    const badgeArray = badge.split(",");
+    let badgeTemplate = "";
+    for (let i = 0; i < badgeArray.length; i++) {
+        badgeTemplate += "![Badge](" + badgeArray[i] + ") ";
+    }
+    return badgeTemplate;
 }
 
 // Create function to render list layout
@@ -145,9 +157,9 @@ function getAvatar(username) {
 }
 
 // Create function to generate the template literate using data from the prompt and GitHub call
-function generateTemplate(fullName, username, title, shortDescription, longDescription, screenshotUrl, installationList, usageList, creditList, license, testList, badge, avatarUrl, year) {
+function generateTemplate(fullName, username, title, shortDescription, longDescription, screenshotUrl, installationList, usageList, creditList, license, testList, badgeTags, avatarUrl, year) {
     return `
-# ${title}   [![Contributor Covenant](https://img.shields.io/badge/Contributor%20Covenant-v2.0%20adopted-ff69b4.svg)](code_of_conduct.md) ![User Badge](${badge})
+# ${title}   ${badgeTags}  
 > ${shortDescription}    
 
 
@@ -192,7 +204,8 @@ Please note that this project is released with a Contributor Code of Conduct. By
 ${testList}
 
 
-## Author  
+## Questions
+You may address any questions to the author listed below:  
 Name: __${fullName}__  
 GitHub: github.com/${username}  
 ![Image of Me](${avatarUrl})
