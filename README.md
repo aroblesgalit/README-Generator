@@ -1,12 +1,12 @@
 
-# Title   [![Contributor Covenant](https://img.shields.io/badge/Contributor%20Covenant-v2.0%20adopted-ff69b4.svg)](code_of_conduct.md) ![User Badge](no)
+# Title   [![Contributor Covenant](https://img.shields.io/badge/Contributor%20Covenant-v2.0%20adopted-ff69b4.svg)](code_of_conduct.md) ![User Badge](url here)
 > short one    
 
 
 ## Description  
-long oneeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee  
+long one  
 
-![Screenshot](screenshot)  
+![Screenshot](url screenshot)  
 
 
 ## Table of Contents  
@@ -20,18 +20,24 @@ long oneeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee
 
 
 ## Installation  
-1. step 1 here
-2.  step 2 this one
-3.  and then step 3
+1. step 1
+2.  step 2
+3.  step 3
+4.  step 4
 
 
 
 ## Usage  
-    no
+* example 1
+*  example 2
+
 
 
 ## Credits  
-    no
+* credit 1
+*  credit 2
+*  credit 3
+
 
 
 ## License  
@@ -44,7 +50,9 @@ Please note that this project is released with a Contributor Code of Conduct. By
 
 
 ## Tests  
-    no
+* test 1
+*  test 2
+
 
 
 ## Author  
