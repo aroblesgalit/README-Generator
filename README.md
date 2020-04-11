@@ -56,4 +56,4 @@ THEN a README for the repo is generated
 - - -
 
 ## Animated GIF
-![Good README Generator](./images/readmeGenerator.gif)
+![Good README Generator](https://media.giphy.com/media/htjeDPD3oBwacEQBRs/giphy.gif)
