@@ -6,7 +6,6 @@
 ## Description  
 This was a homework assignment where we created a command-line application that dynamically generates a README.md from a user's input. The application will be invoked with the following command - node index.js  
 
-
 ![Screenshot](https://github.com/aroblesgalit/09-Good-README-Generator/raw/master/images/readme-generator-screenshot.JPG)  
 
 
@@ -21,7 +20,7 @@ This was a homework assignment where we created a command-line application that 
 
 
 ## Installation  
-    npm install readme-generator
+    npm install readmeGenerator
 
 
 ## Usage  
@@ -29,7 +28,7 @@ This was a homework assignment where we created a command-line application that 
 
 
 ## Credits  
-    GitHub API
+    GitHub API, Moment
 
 
 ## License  

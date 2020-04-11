@@ -2,6 +2,7 @@ const fs = require("fs");
 const util = require("util");
 const inquirer = require("inquirer");
 const axios = require("axios");
+const moment = require("moment");
 
 // Promisify methods
 const writeFileAsync = util.promisify(fs.writeFile);
@@ -15,12 +16,15 @@ async function init() {
         // Get results from user
         const { fullName, username, title, shortDescription, longDescription, screenshotUrl, installation, usage, credits, license, tests, badge } = userResponse;
 
-        // call axios
+        // Call axios
         const avatarUrl = await getAvatar(username);
 
-        // create template
-        const template = await generateTemplate(fullName, username, title, shortDescription, longDescription, screenshotUrl, installation, usage, credits, license, tests, badge, avatarUrl);
-        // write file
+        // Get current year
+        const year = await moment().year();
+
+        // Create template
+        const template = await generateTemplate(fullName, username, title, shortDescription, longDescription, screenshotUrl, installation, usage, credits, license, tests, badge, avatarUrl, year);
+        // Write file
         await writeFileAsync("README.md", template, "utf8");
         console.log("README.md has been generated.");
 
@@ -120,7 +124,7 @@ function getAvatar(username) {
 }
 
 // Create function to generate the template literate using data from the prompt and GitHub call
-function generateTemplate(fullName, username, title, shortDescription, longDescription, screenshotUrl, installation, usage, credits, license, tests, badge, avatarUrl) {
+function generateTemplate(fullName, username, title, shortDescription, longDescription, screenshotUrl, installation, usage, credits, license, tests, badge, avatarUrl, year) {
     return `
 # ${title}   [![Contributor Covenant](https://img.shields.io/badge/Contributor%20Covenant-v2.0%20adopted-ff69b4.svg)](code_of_conduct.md) ![User Badge](${badge})
 > ${shortDescription}    
@@ -128,7 +132,6 @@ function generateTemplate(fullName, username, title, shortDescription, longDescr
 
 ## Description  
 ${longDescription}  
-
 
 ![Screenshot](${screenshotUrl})  
 
@@ -169,12 +172,12 @@ Please note that this project is released with a Contributor Code of Conduct. By
 
 
 ## Author  
-    Name: __${fullName}__  
-    GitHub: github.com/${username}  
-    ![Image of Me](${avatarUrl})
+Name: __${fullName}__  
+GitHub: github.com/${username}  
+![Image of Me](${avatarUrl})
 
 
 ---
-© 2020 ${fullName}. All Rights Reserved.
+© ${year} ${fullName}. All Rights Reserved.
 `
 }
