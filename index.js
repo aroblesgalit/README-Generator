@@ -6,12 +6,18 @@ const axios = require("axios");
 // Promisify methods
 const writeFileAsync = util.promisify(fs.writeFile);
 
-async function() {
+init();
+
+async function init() {
     try {
+        // Prompt user 
+        const userResponse = await promptUser();
+        // Get results from user
+        const { fullName, username, title, shortDescription, longDescription, screenshotUrl, installation, usage, credits, license, tests, badge } = userResponse;
 
         // call axios
-
-        // prompt
+        const avatarUrl = await getAvatar(username);
+        console.log(avatarUrl);
 
         // create template
 
@@ -105,7 +111,7 @@ function promptUser() {
 function getAvatar(username) {
     const queryUrl = `https://api.github.com/search/users?q=${username}`;
 
-    axios
+    return axios
         .get(queryUrl)
         .then(function (response) {
             const { avatar_url } = response.data.items[0];
