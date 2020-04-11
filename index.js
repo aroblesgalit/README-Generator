@@ -34,8 +34,8 @@ async function init() {
         // Create template
         const template = await generateTemplate(fullName, username, title, shortDescription, longDescription, screenshotUrl, installationList, usageList, creditList, license, testList, badgeTags, contributingCopy, avatarUrl, year);
         // Write file
-        await writeFileAsync("README.md", template, "utf8");
-        console.log("README.md has been generated.");
+        await writeFileAsync("README-GENERATED.md", template, "utf8");
+        console.log("README file has been generated.");
 
     } catch (err) {
         console.log(err);
@@ -119,7 +119,7 @@ function promptUser() {
         },
         {
             type: "confirm",
-            message: "Would you like to allow contributors? (y/n):",
+            message: "Would you like to allow contributors?",
             name: "contributor",
             default: true
         }
@@ -193,7 +193,7 @@ ${longDescription}
 * [License](#license)
 * [Contributing](#contributing)
 * [Tests](#tests)
-* [Author](#author)
+* [Questions](#questions)
 
 
 ## Installation  
@@ -222,8 +222,9 @@ ${testList}
 
 ## Questions
 You may address any questions to the author listed below:  
+
 Name: __${fullName}__  
-GitHub: [${username}](https://github.com/${username})
+GitHub: [${username}](https://github.com/${username})  
 ![Image of Me](${avatarUrl})
 
 
