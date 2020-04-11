@@ -15,6 +15,8 @@ async function init() {
         const userResponse = await promptUser();
         // Get results from user
         const { fullName, username, title, shortDescription, longDescription, screenshotUrl, installation, usage, credits, license, tests, badge } = userResponse;
+        // Create list from comma separated responses
+        const installationList = await createList(installation);
 
         // Call axios
         const avatarUrl = await getAvatar(username);
@@ -23,7 +25,7 @@ async function init() {
         const year = await moment().year();
 
         // Create template
-        const template = await generateTemplate(fullName, username, title, shortDescription, longDescription, screenshotUrl, installation, usage, credits, license, tests, badge, avatarUrl, year);
+        const template = await generateTemplate(fullName, username, title, shortDescription, longDescription, screenshotUrl, installationList, usage, credits, license, tests, badge, avatarUrl, year);
         // Write file
         await writeFileAsync("README.md", template, "utf8");
         console.log("README.md has been generated.");
@@ -111,6 +113,16 @@ function promptUser() {
     ])
 }
 
+// Create function to render list layout
+function createList(responseList) {
+    const responseArray = responseList.split(",");
+    let responseTemplate = "";
+    for (let i = 0; i < responseArray.length; i++ ) {
+        responseTemplate += i + 1 + ". " + responseArray[i] + "\n";
+    }
+    return responseTemplate;
+}
+
 // Create function to call axios to get user's avatar
 function getAvatar(username) {
     const queryUrl = `https://api.github.com/search/users?q=${username}`;
@@ -124,7 +136,7 @@ function getAvatar(username) {
 }
 
 // Create function to generate the template literate using data from the prompt and GitHub call
-function generateTemplate(fullName, username, title, shortDescription, longDescription, screenshotUrl, installation, usage, credits, license, tests, badge, avatarUrl, year) {
+function generateTemplate(fullName, username, title, shortDescription, longDescription, screenshotUrl, installationList, usage, credits, license, tests, badge, avatarUrl, year) {
     return `
 # ${title}   [![Contributor Covenant](https://img.shields.io/badge/Contributor%20Covenant-v2.0%20adopted-ff69b4.svg)](code_of_conduct.md) ![User Badge](${badge})
 > ${shortDescription}    
@@ -147,7 +159,7 @@ ${longDescription}
 
 
 ## Installation  
-    ${installation}
+${installationList}
 
 
 ## Usage  
