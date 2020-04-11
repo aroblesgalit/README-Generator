@@ -14,9 +14,16 @@ async function init() {
         // Prompt user 
         const userResponse = await promptUser();
         // Get results from user
-        const { fullName, username, title, shortDescription, longDescription, screenshotUrl, installation, usage, credits, license, tests, badge } = userResponse;
-        // Create list from comma separated responses
-        const installationList = await createList(installation);
+        const { fullName, username, title, shortDescription, longDescription, screenshotUrl, installation, usage, credits, license, tests, badge, contributor } = userResponse;
+        // Create lists from comma separated responses
+        const installationList = await createList(installation, "ordered");
+        const usageList = await createList(usage, "unordered");
+        const creditList = await createList(credits, "unordered");
+        const testList = await createList(tests, "unordered");
+        // Create badges from badge urls
+        const badgeTags = await renderBadges(badge);
+        // Create copy for contributing section
+        const contributingCopy = await renderContributing(contributor);
 
         // Call axios
         const avatarUrl = await getAvatar(username);
@@ -25,10 +32,10 @@ async function init() {
         const year = await moment().year();
 
         // Create template
-        const template = await generateTemplate(fullName, username, title, shortDescription, longDescription, screenshotUrl, installationList, usage, credits, license, tests, badge, avatarUrl, year);
+        const template = await generateTemplate(fullName, username, title, shortDescription, longDescription, screenshotUrl, installationList, usageList, creditList, license, testList, badgeTags, contributingCopy, avatarUrl, year);
         // Write file
-        await writeFileAsync("README.md", template, "utf8");
-        console.log("README.md has been generated.");
+        await writeFileAsync("README-GENERATED.md", template, "utf8");
+        console.log("README file has been generated.");
 
     } catch (err) {
         console.log(err);
@@ -70,17 +77,17 @@ function promptUser() {
         },
         {
             type: "input",
-            message: "Provide a step-by-step description of how to install your project (separate using a comma):",
+            message: "Provide a step-by-step description of how to install your project (separate using commas):",
             name: "installation"
         },
         {
             type: "input",
-            message: "Provide instructions and examples for use (separate using a comma):",
+            message: "Provide instructions and examples for use (separate using commas):",
             name: "usage"
         },
         {
             type: "input",
-            message: "List your collaborators, third-party assets, etc. if any (separate using a comma):",
+            message: "List your collaborators, third-party assets, etc. if any (separate using commas):",
             name: "credits"
         },
         {
@@ -102,23 +109,54 @@ function promptUser() {
         },
         {
             type: "input",
-            message: "Write tests for your application (separate using a comma):",
+            message: "Write tests for your application (separate using commas):",
             name: "tests"
         },
         {
             type: "input",
-            message: "Add a url for a badge for this application:",
+            message: "Add urls (separate using commas) for badges:",
             name: "badge"
+        },
+        {
+            type: "confirm",
+            message: "Would you like to allow contributors?",
+            name: "contributor",
+            default: true
         }
     ])
 }
 
+// Create function to render contributing section
+function renderContributing(contributor) {
+    if (contributor) {
+        return "Please note that this project is released with a Contributor Code of Conduct. By participating in this project you agree to abide by its terms. [Contributor Covenant Code of Conduct](https://www.contributor-covenant.org/version/2/0/code_of_conduct/)"
+    } else {
+        return "None at this time."
+    }
+}
+
+// Create function to render badges for layout
+function renderBadges(badge) {
+    const badgeArray = badge.split(",");
+    let badgeTemplate = "";
+    for (let i = 0; i < badgeArray.length; i++) {
+        badgeTemplate += "![Badge](" + badgeArray[i] + ") ";
+    }
+    return badgeTemplate;
+}
+
 // Create function to render list layout
-function createList(responseList) {
+function createList(responseList, type) {
     const responseArray = responseList.split(",");
     let responseTemplate = "";
-    for (let i = 0; i < responseArray.length; i++ ) {
-        responseTemplate += i + 1 + ". " + responseArray[i] + "\n";
+    if (type === "ordered") {
+        for (let i = 0; i < responseArray.length; i++ ) {
+            responseTemplate += i + 1 + ". " + responseArray[i] + "\n";
+        }
+    } else if (type === "unordered") {
+        for (let i = 0; i < responseArray.length; i++ ) {
+            responseTemplate += "* " + responseArray[i] + "\n";
+        }
     }
     return responseTemplate;
 }
@@ -136,9 +174,9 @@ function getAvatar(username) {
 }
 
 // Create function to generate the template literate using data from the prompt and GitHub call
-function generateTemplate(fullName, username, title, shortDescription, longDescription, screenshotUrl, installationList, usage, credits, license, tests, badge, avatarUrl, year) {
+function generateTemplate(fullName, username, title, shortDescription, longDescription, screenshotUrl, installationList, usageList, creditList, license, testList, badgeTags, contributingCopy, avatarUrl, year) {
     return `
-# ${title}   [![Contributor Covenant](https://img.shields.io/badge/Contributor%20Covenant-v2.0%20adopted-ff69b4.svg)](code_of_conduct.md) ![User Badge](${badge})
+# ${title}   ${badgeTags}  
 > ${shortDescription}    
 
 
@@ -155,7 +193,7 @@ ${longDescription}
 * [License](#license)
 * [Contributing](#contributing)
 * [Tests](#tests)
-* [Author](#author)
+* [Questions](#questions)
 
 
 ## Installation  
@@ -163,11 +201,11 @@ ${installationList}
 
 
 ## Usage  
-    ${usage}
+${usageList}
 
 
 ## Credits  
-    ${credits}
+${creditList}
 
 
 ## License  
@@ -175,17 +213,18 @@ ${installationList}
 
 
 ## Contributing  
-Please note that this project is released with a Contributor Code of Conduct. By participating in this project you agree to abide by its terms.
-[Contributor Covenant Code of Conduct](https://www.contributor-covenant.org/version/2/0/code_of_conduct/)
+${contributingCopy}
 
 
 ## Tests  
-    ${tests}
+${testList}
 
 
-## Author  
+## Questions
+You may address any questions to the author listed below:  
+
 Name: __${fullName}__  
-GitHub: github.com/${username}  
+GitHub: [${username}](https://github.com/${username})  
 ![Image of Me](${avatarUrl})
 
 
