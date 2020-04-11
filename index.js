@@ -17,12 +17,12 @@ async function init() {
 
         // call axios
         const avatarUrl = await getAvatar(username);
-        console.log(avatarUrl);
 
         // create template
-
+        const template = await generateTemplate(fullName, username, title, shortDescription, longDescription, screenshotUrl, installation, usage, credits, license, tests, badge, avatarUrl);
         // write file
-
+        await writeFileAsync("README.md", template, "utf8");
+        console.log("README.md has been generated.");
 
     } catch (err) {
         console.log(err);
@@ -120,14 +120,20 @@ function getAvatar(username) {
 }
 
 // Create function to generate the template literate using data from the prompt and GitHub call
-function generateTemplate(fullName, username, title, shortDescription, longDescription, screenshotUrl, installation, usage, credits, license, tests, avatar, badge) {
+function generateTemplate(fullName, username, title, shortDescription, longDescription, screenshotUrl, installation, usage, credits, license, tests, badge, avatarUrl) {
     return `
 # ${title}   [![Contributor Covenant](https://img.shields.io/badge/Contributor%20Covenant-v2.0%20adopted-ff69b4.svg)](code_of_conduct.md) ![User Badge](${badge})
-> ${shortDescription}  
-## Description
-${longDescription}
-![Screenshot](${screenshotUrl})
-## Table of Contents
+> ${shortDescription}    
+
+
+## Description  
+${longDescription}  
+
+
+![Screenshot](${screenshotUrl})  
+
+
+## Table of Contents  
 * [Installation](#installation)
 * [Usage](#usage)
 * [Credits](#credits)
@@ -135,23 +141,39 @@ ${longDescription}
 * [Contributing](#contributing)
 * [Tests](#tests)
 * [Author](#author)
-## Installation
+
+
+## Installation  
     ${installation}
-## Usage
+
+
+## Usage  
     ${usage}
-## Credits
+
+
+## Credits  
     ${credits}
-## License
-    ${license}
-## Contributing
+
+
+## License  
+    This project is licensed under the terms of the ${license}.
+
+
+## Contributing  
 Please note that this project is released with a Contributor Code of Conduct. By participating in this project you agree to abide by its terms.
 [Contributor Covenant Code of Conduct](https://www.contributor-covenant.org/version/2/0/code_of_conduct/)
-## Tests
+
+
+## Tests  
     ${tests}
-## Author
-Name: __${fullName}__  
-GitHub: github.com/${username}  
-![Image of Me](${avatar})
+
+
+## Author  
+    Name: __${fullName}__  
+    GitHub: github.com/${username}  
+    ![Image of Me](${avatarUrl})
+
+
 ---
 © 2020 ${fullName}. All Rights Reserved.
 `
