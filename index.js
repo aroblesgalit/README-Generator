@@ -16,7 +16,7 @@ async function init() {
         // Get results from user
         const { fullName, username, title, shortDescription, longDescription, screenshotUrl, installation, usage, credits, license, tests, badge } = userResponse;
         // Create list from comma separated responses
-        const installationList = await createList(installation);
+        const installationList = await createList(installation, "ordered");
 
         // Call axios
         const avatarUrl = await getAvatar(username);
@@ -114,13 +114,18 @@ function promptUser() {
 }
 
 // Create function to render list layout
-function createList(responseList) {
+function createList(responseList, type) {
     const responseArray = responseList.split(",");
     let responseTemplate = "";
-    for (let i = 0; i < responseArray.length; i++ ) {
-        responseTemplate += i + 1 + ". " + responseArray[i] + "\n";
+    if (type === "ordered") {
+        for (let i = 0; i < responseArray.length; i++ ) {
+            responseTemplate += i + 1 + ". " + responseArray[i] + "\n";
+        }
+    } else if (type === "unordered") {
+        
     }
     return responseTemplate;
+
 }
 
 // Create function to call axios to get user's avatar
