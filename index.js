@@ -14,7 +14,7 @@ async function init() {
         // Prompt user 
         const userResponse = await promptUser();
         // Get results from user
-        const { fullName, username, title, shortDescription, longDescription, screenshotUrl, installation, usage, credits, license, tests, badge } = userResponse;
+        const { fullName, username, title, shortDescription, longDescription, screenshotUrl, installation, usage, credits, license, tests, badge, contributor } = userResponse;
         // Create lists from comma separated responses
         const installationList = await createList(installation, "ordered");
         const usageList = await createList(usage, "unordered");
@@ -22,6 +22,8 @@ async function init() {
         const testList = await createList(tests, "unordered");
         // Create badges from badge urls
         const badgeTags = await renderBadges(badge);
+        // Create copy for contributing section
+        const contributingCopy = await renderContributing(contributor);
 
         // Call axios
         const avatarUrl = await getAvatar(username);
@@ -30,7 +32,7 @@ async function init() {
         const year = await moment().year();
 
         // Create template
-        const template = await generateTemplate(fullName, username, title, shortDescription, longDescription, screenshotUrl, installationList, usageList, creditList, license, testList, badgeTags, avatarUrl, year);
+        const template = await generateTemplate(fullName, username, title, shortDescription, longDescription, screenshotUrl, installationList, usageList, creditList, license, testList, badgeTags, contributingCopy, avatarUrl, year);
         // Write file
         await writeFileAsync("README.md", template, "utf8");
         console.log("README.md has been generated.");
@@ -114,8 +116,23 @@ function promptUser() {
             type: "input",
             message: "Add urls (separate using commas) for badges:",
             name: "badge"
+        },
+        {
+            type: "confirm",
+            message: "Would you like to allow contributors? (y/n):",
+            name: "contributor",
+            default: true
         }
     ])
+}
+
+// Create function to render contributing section
+function renderContributing(contributor) {
+    if (contributor) {
+        return "Please note that this project is released with a Contributor Code of Conduct. By participating in this project you agree to abide by its terms. [Contributor Covenant Code of Conduct](https://www.contributor-covenant.org/version/2/0/code_of_conduct/)"
+    } else {
+        return "None at this time."
+    }
 }
 
 // Create function to render badges for layout
@@ -157,7 +174,7 @@ function getAvatar(username) {
 }
 
 // Create function to generate the template literate using data from the prompt and GitHub call
-function generateTemplate(fullName, username, title, shortDescription, longDescription, screenshotUrl, installationList, usageList, creditList, license, testList, badgeTags, avatarUrl, year) {
+function generateTemplate(fullName, username, title, shortDescription, longDescription, screenshotUrl, installationList, usageList, creditList, license, testList, badgeTags, contributingCopy, avatarUrl, year) {
     return `
 # ${title}   ${badgeTags}  
 > ${shortDescription}    
@@ -196,8 +213,7 @@ ${creditList}
 
 
 ## Contributing  
-Please note that this project is released with a Contributor Code of Conduct. By participating in this project you agree to abide by its terms.
-[Contributor Covenant Code of Conduct](https://www.contributor-covenant.org/version/2/0/code_of_conduct/)
+${contributingCopy}
 
 
 ## Tests  
@@ -207,7 +223,7 @@ ${testList}
 ## Questions
 You may address any questions to the author listed below:  
 Name: __${fullName}__  
-GitHub: github.com/${username}  
+GitHub: [${username}](https://github.com/${username})
 ![Image of Me](${avatarUrl})
 
 
