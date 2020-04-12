@@ -26,7 +26,12 @@ async function init() {
         const contributingCopy = await renderContributing(contributor);
 
         // Call axios
-        const avatarUrl = await getAvatar(username);
+        // const avatarUrl = await getAvatar(username);
+        const queryUrl = `https://api.github.com/search/users?q=${username}`;
+
+        const response = await axios.get(queryUrl);
+        const { avatar_url } = response.data.items[0];
+        console.log(avatar_url);
 
         // Get current year
         const year = await moment().year();
@@ -150,11 +155,11 @@ function createList(responseList, type) {
     const responseArray = responseList.split(",");
     let responseTemplate = "";
     if (type === "ordered") {
-        for (let i = 0; i < responseArray.length; i++ ) {
+        for (let i = 0; i < responseArray.length; i++) {
             responseTemplate += i + 1 + ". " + responseArray[i] + "\n";
         }
     } else if (type === "unordered") {
-        for (let i = 0; i < responseArray.length; i++ ) {
+        for (let i = 0; i < responseArray.length; i++) {
             responseTemplate += "* " + responseArray[i] + "\n";
         }
     }
